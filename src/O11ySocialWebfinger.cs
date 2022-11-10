@@ -1,35 +1,38 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace csharp
+namespace webfinger;
+public static class O11ySocialWebfinger
 {
-    public static class O11ySocialWebfinger
+    [FunctionName("O11ySocialWebfinger")]
+    public static async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = ".well-known/webfinger")] HttpRequest req,
+        ILogger log)
     {
-        [FunctionName("O11ySocialWebfinger")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = ".well-known/webfinger")] HttpRequest req,
-            ILogger log)
-        {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+        log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+        string name = req.Query["resource"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+        if (name != "acct:martindotnet@o11y.social")
+            return new NotFoundResult();
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
-        }
+        return new OkObjectResult(new ActivityPubAccount {
+            Subject = "acct:martindotnet@o11y.social",
+            Aliases = new List<string> {
+                "https://hachyderm.io/@martindotnet"
+            },
+            Links = new List<Link> {
+                new Link {
+                    Relation = "self",
+                    Type = "application/activity+json",
+                    Href = "https://hachyderm.io/users/MartinDotNet"
+                }
+            }
+        });
     }
 }
