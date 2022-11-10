@@ -14,7 +14,7 @@ namespace csharp
     {
         [FunctionName("O11ySocialWebfinger")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = ".well-known/webfinger")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = ".well-known/webfinger")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
