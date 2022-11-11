@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
 
 namespace webfinger;
 public class O11ySocialWebfinger
@@ -24,13 +25,16 @@ public class O11ySocialWebfinger
         if (name != "acct:martindotnet@o11y.social")
             return new NotFoundResult();
 
-        return new OkObjectResult(JsonSerializer.Serialize(new ActivityPubAccount {
-            Subject = "acct:Martindotnet@hachyderm.io",
-            Aliases = new List<string> {
+        return new ContentResult
+        {
+            Content = JsonSerializer.Serialize(new ActivityPubAccount
+            {
+                Subject = "acct:Martindotnet@hachyderm.io",
+                Aliases = new List<string> {
                 "https://hachyderm.io/@Martindotnet",
                 "https://hachyderm.io/users/Martindotnet"
             },
-            Links = new List<Link> {
+                Links = new List<Link> {
                 new Link {
                     Relation = "http://webfinger.net/rel/profile-page",
                     Type = "text/html",
@@ -46,8 +50,13 @@ public class O11ySocialWebfinger
                     Template = "https://hachyderm.io/authorize_interaction?uri={uri}"
                 }
             }
-        }, new JsonSerializerOptions {
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        }));
+            }, new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            }),
+            ContentType = "application/json"
+        };
     }
 }
