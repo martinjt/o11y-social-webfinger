@@ -25,21 +25,21 @@ public class O11ySocialWebfinger
             return new NotFoundResult();
 
         return new OkObjectResult(JsonSerializer.Serialize(new ActivityPubAccount {
-            Subject = "acct:martindotnet@hachyderm.io",
+            Subject = "acct:Martindotnet@hachyderm.io",
             Aliases = new List<string> {
-                "https://hachyderm.io/@martindotnet",
-                "https://hachyderm.io/users/MartinDotNet"
+                "https://hachyderm.io/@Martindotnet",
+                "https://hachyderm.io/users/Martindotnet"
             },
             Links = new List<Link> {
-                new Link {
-                    Relation = "self",
-                    Type = "application/activity+json",
-                    Href = "https://hachyderm.io/users/MartinDotNet"
-                },
                 new Link {
                     Relation = "http://webfinger.net/rel/profile-page",
                     Type = "text/html",
                     Href = "https://hachyderm.io/@Martindotnet"
+                },
+                new Link {
+                    Relation = "self",
+                    Type = "application/activity+json",
+                    Href = "https://hachyderm.io/users/Martindotnet"
                 },
                 new Link {
                     Relation = "http://ostatus.org/schema/1.0/subscribe",
