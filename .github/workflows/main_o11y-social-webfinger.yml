@@ -36,7 +36,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'o11y-social-webfinger'
+          app-name: 'o11y-social'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EB3521C2EAF74C558FF30E6152CC6D61 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_795DF657F95A4EB8B908360950A7D1EF }}
