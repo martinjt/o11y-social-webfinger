@@ -6,24 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace webfinger;
-public static class O11ySocialWebfinger
+public class O11ySocialWebfinger
 {
     [FunctionName("O11ySocialWebfinger")]
-    public static async Task<IActionResult> Run(
+    public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = ".well-known/webfinger")] HttpRequest req,
         ILogger log)
     {
-        log.LogInformation("C# HTTP trigger function processed a request.");
-
         string name = req.Query["resource"];
+
+        Activity.Current?.SetTag("account.name", name);
+        log.LogInformation("C# HTTP trigger function processed a request.");
 
         if (name != "acct:martindotnet@o11y.social")
             return new NotFoundResult();
 
         return new OkObjectResult(JsonSerializer.Serialize(new ActivityPubAccount {
-            Subject = "acct:martindotnet@o11y.social",
+            Subject = "acct:martindotnet@hachyderm.io",
             Aliases = new List<string> {
                 "https://hachyderm.io/@martindotnet",
                 "https://hachyderm.io/users/MartinDotNet"
