@@ -24,7 +24,8 @@ public static class O11ySocialWebfinger
         return new OkObjectResult(new ActivityPubAccount {
             Subject = "acct:martindotnet@o11y.social",
             Aliases = new List<string> {
-                "https://hachyderm.io/@martindotnet"
+                "https://hachyderm.io/@martindotnet",
+                "https://hachyderm.io/users/MartinDotNet"
             },
             Links = new List<Link> {
                 new Link {
